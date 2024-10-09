@@ -17,15 +17,15 @@
             width: 200px;
             position: fixed;
             top: 0;
-            left: -240px; /* Start hidden */
+            left: -240px; 
             background-color: #f8f9fa;
             padding-top: 20px;
             border-right: 1px solid #ddd;
-            transition: left 0.3s ease; /* Sliding effect */
+            transition: left 0.3s ease; 
         }
 
         .sidebar.active {
-            left: 0; /* Slide in */
+            left: 0; 
         }
 
         .sidebar a {
@@ -43,7 +43,7 @@
         .card {
             border-radius: 10px;
             box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-            margin-left: 240px; /* Adjusted for sidebar width */
+            margin-left: 240px; 
         }
 
         .container {
@@ -79,7 +79,7 @@
             color: #333;
         }
 
-        /* Responsive Headings */
+        
         @media (max-width: 576px) {
             .responsive-heading {
                 font-size: 1.5rem;
@@ -192,13 +192,13 @@
     </div>
 
     <script>
-        // Toggle sidebar visibility
+        
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             sidebar.classList.toggle('active');
         }
 
-        // Load user tasks from local storage
+       
         function loadUserTasks() {
             const userName = document.getElementById('userName').value.trim();
             const taskSection = document.getElementById('taskSection');
@@ -209,7 +209,7 @@
 
             const tasksData = JSON.parse(localStorage.getItem('tasksData')) || {};
 
-            // Check if user exists in tasksData
+            
             if (userName in tasksData) {
                 const userTasks = tasksData[userName];
                 const totalTasks = userTasks.length;
@@ -218,10 +218,9 @@
 
                 userWelcome.textContent = `Hello, ${userName}`;
                 taskList.innerHTML = '';
-                noTasksMessage.style.display = 'none'; // Hide message initially
-
+                noTasksMessage.style.display = 'none'; 
                 if (totalTasks === 0) {
-                    noTasksMessage.style.display = 'block'; // Show no tasks message
+                    noTasksMessage.style.display = 'block'; 
                 } else {
                     userTasks.forEach(task => {
                         const taskItem = document.createElement('li');
@@ -234,20 +233,20 @@
                 progressBar.style.width = `${taskPercentage}%`;
                 progressBar.textContent = `${taskPercentage}%`;
 
-                taskSection.style.display = 'block'; // Show task section
+                taskSection.style.display = 'block'; 
             } else {
                 alert('User not found. Please check the name and try again.');
             }
         }
 
-        // Mark attendance function
+     
         function markAttendance() {
             const attendanceMessage = document.getElementById('attendanceMessage');
             attendanceMessage.textContent = 'Attendance marked successfully!';
             attendanceMessage.classList.add('alert-success');
         }
 
-        // Leave form submission
+ 
         document.getElementById('leaveForm').addEventListener('submit', function (event) {
             event.preventDefault();
             const leaveStart = document.getElementById('leaveStart').value;
@@ -259,11 +258,11 @@
             leaveItem.textContent = `Leave from ${leaveStart} to ${leaveEnd}`;
             leaveList.appendChild(leaveItem);
 
-            // Reset form
+            
             event.target.reset();
         });
 
-        // Meeting form submission
+        
         document.getElementById('meetingForm').addEventListener('submit', function (event) {
             event.preventDefault();
             const meetingDate = document.getElementById('meetingDate').value;
@@ -275,7 +274,7 @@
             meetingItem.textContent = `Meeting on ${meetingDate} at ${meetingTime}`;
             meetingList.appendChild(meetingItem);
 
-            // Reset form
+       
             event.target.reset();
         });
     </script>

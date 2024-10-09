@@ -115,12 +115,12 @@ body {
   margin-left: 250px;
 }
 
-/* Hide sections by default */
+
 #addMemberSection, #removeMemberSection {
   display: none;
 }
 
-/* Added some new styles for the tables */
+
 table {
   border-collapse: collapse;
   width: 100%;
@@ -140,7 +140,7 @@ tr:hover {
   background-color: #f1f1f1;
 }
 
-/* Added some new styles for the buttons */
+
 .btn {
   border: none;
   padding: 10px 20px;
@@ -169,13 +169,13 @@ tr:hover {
   font-size: 12px;
 }
 
-/* Added some new styles for the icons */
+
 i {
   font-size: 18px;
   margin-right: 10px;
 }
 
-/* Added some new styles for the dashboard */
+
 .dashboard {
   display: flex;
   flex-wrap: wrap;
@@ -322,71 +322,71 @@ i {
       mainContent.classList.toggle("active");
     }
 
-    // Show "Add Member" section and hide others
+    
     function showAddMember() {
       document.getElementById("addMemberSection").style.display = 'block';
       document.getElementById("removeMemberSection").style.display = 'none';
     }
 
-    // Show "Remove Member" section and hide others
+   
     function showRemoveMember() {
       document.getElementById("removeMemberSection").style.display = 'block';
       document.getElementById("addMemberSection").style.display = 'none';
     }
 
-    // Function to add a new member
+    
     document.getElementById('addMemberForm').addEventListener('submit', function(event) {
       event.preventDefault();
       const memberName = document.getElementById('memberName').value;
       const memberUserId = document.getElementById('memberUserId').value;
       const teamId = document.getElementById('teamSelect').value;
 
-      // Add member to team members array
+      
       teamMembers[teamId].push(memberName);
-      saveTeamMembers(); // Save updated members to local storage
-      document.getElementById('memberName').value = ''; // Clear the form
+      saveTeamMembers(); 
+      document.getElementById('memberName').value = '';
       alert(`Member ${memberName} added to the team!`);
     });
 
-    // Function to remove a member
+    
     document.getElementById('removeMemberForm').addEventListener('submit', function(event) {
       event.preventDefault();
       const removeMemberName = document.getElementById('removeMemberName').value;
       const teamId = document.getElementById('removeTeamSelect').value;
 
-      // Remove member from the team members array
+      
       const index = teamMembers[teamId].indexOf(removeMemberName);
       if (index !== -1) {
         teamMembers[teamId].splice(index, 1);
-        saveTeamMembers(); // Save updated members to local storage
-        document.getElementById('removeMemberName').value = ''; // Clear the form
+        saveTeamMembers(); 
+        document.getElementById('removeMemberName').value = '';
         alert(`Member ${removeMemberName} removed from the team!`);
       } else {
         alert(`Member ${removeMemberName} not found in the selected team.`);
       }
     });
 
-    // Load team members data from local storage
+    
     let teamMembers = JSON.parse(localStorage.getItem('teamMembers')) || {
       1: ['Ayush', 'Priya', 'Divyansh', 'Gunita'],
       2: ['Bilakshan', 'Bhavesh', 'Bhumika', 'Chirayu']
     };
 
-    // Function to save team members to local storage
+  
     function saveTeamMembers() {
       localStorage.setItem('teamMembers', JSON.stringify(teamMembers));
     }
 
-    // View team details and tasks
+    
     function viewTeam(teamId) {
       const selectedMemberName = document.getElementById('selectedMemberName');
       const taskAssignmentSection = document.getElementById('taskAssignmentSection');
 
-      // Show team members
+  
       const membersList = document.getElementById('membersList');
       membersList.innerHTML = `<h4>Team Members</h4><ul class="list-group">${teamMembers[teamId].map(member => `<li class="list-group-item" onclick="updateManagerView('${member}')">${member} <span id="percentage-${member}" class="member-percentage">0%</span></li>`).join('')}</ul>`;
 
-      // Show task assignment section
+
       taskAssignmentSection.style.display = 'block';
       updateCompletionPercentage(teamId);
     }
@@ -410,7 +410,7 @@ i {
           </div>
         </li>`).join('') + '</ul>';
 
-      updateMemberCompletionPercentage(memberName); // Update individual member's completion percentage
+      updateMemberCompletionPercentage(memberName);
     }
 
     document.getElementById('taskAssignmentForm').addEventListener('submit', function(event) {
@@ -426,14 +426,14 @@ i {
 
         tasksData[memberName].push({ taskName: taskName, completed: false });
         localStorage.setItem('tasksData', JSON.stringify(tasksData));
-        document.getElementById('taskName').value = ''; // Clear input
-        updateManagerView(memberName); // Refresh tasks for that member
+        document.getElementById('taskName').value = ''; 
+        updateManagerView(memberName); 
       } else {
         alert('Please select a member and enter a task name.');
       }
     });
 
-    // Function to update team completion percentage
+    
     function updateCompletionPercentage(teamId) {
       const completionPercentages = [];
       const tasksData = JSON.parse(localStorage.getItem('tasksData')) || {};
@@ -450,7 +450,7 @@ i {
         document.getElementById(`percentage-${member}`).textContent = `${memberCompletionPercentage}%`;
       });
 
-      // Calculate team completion percentage
+      
       const totalTasks = completionPercentages.length;
       const totalCompleted = completionPercentages.reduce((acc, curr) => acc + curr, 0);
       const teamCompletionPercentage = totalTasks > 0 
@@ -460,29 +460,29 @@ i {
       document.getElementById(`completion-${teamId}`).textContent = `${teamCompletionPercentage}%`;
     }
 
-    // Function to remove a task from the selected member's task list
+    
     function removeTask(memberName, taskIndex) {
       const tasksData = JSON.parse(localStorage.getItem('tasksData')) || {};
       if (memberName in tasksData) {
-        // Remove the task at the specified index
+        
         tasksData[memberName].splice(taskIndex, 1);
         localStorage.setItem('tasksData', JSON.stringify(tasksData));
-        updateManagerView(memberName); // Refresh the task list for the member
+        updateManagerView(memberName); 
       }
     }
 
-    // Function to add a new member to the selected team
+    
     document.getElementById('addMemberForm').addEventListener('submit', function(event) {
       event.preventDefault();
       const memberName = document.getElementById('memberName').value;
       const memberUserId = document.getElementById('memberUserId').value;
       const teamId = document.getElementById('teamSelect').value;
 
-      // Add member to team members array
+      
       teamMembers[teamId].push(memberName);
-      saveTeamMembers(); // Save updated members to local storage
-      document.getElementById('memberName').value = ''; // Clear input
-      document.getElementById('memberUserId').value = ''; // Clear input
+      saveTeamMembers(); 
+      document.getElementById('memberName').value = ''; 
+      document.getElementById('memberUserId').value = ''; 
 
       // Update the member count
       const teamMembersCount = document.getElementById(`team${teamId}Members`);
@@ -491,20 +491,20 @@ i {
       alert(`Member ${memberName} added to Team ${teamId === '1' ? 'Alpha' : 'Beta'}.`);
     });
 
-    // Function to remove a member from the selected team
+    
     document.getElementById('removeMemberForm').addEventListener('submit', function(event) {
       event.preventDefault();
       const memberName = document.getElementById('removeMemberName').value;
       const teamId = document.getElementById('removeTeamSelect').value;
 
-      // Remove member from team members array
+      
       const memberIndex = teamMembers[teamId].indexOf(memberName);
       if (memberIndex > -1) {
         teamMembers[teamId].splice(memberIndex, 1);
-        saveTeamMembers(); // Save updated members to local storage
-        document.getElementById('removeMemberName').value = ''; // Clear input
+        saveTeamMembers(); 
+        document.getElementById('removeMemberName').value = ''; 
 
-        // Update the member count
+        
         const teamMembersCount = document.getElementById(`team${teamId}Members`);
         teamMembersCount.textContent = teamMembers[teamId].length;
 
@@ -514,7 +514,7 @@ i {
       }
     });
 
-    // Initialize member counts
+    
     const team1Count = document.getElementById('team1Members');
     const team2Count = document.getElementById('team2Members');
     team1Count.textContent = teamMembers[1].length;
@@ -543,16 +543,16 @@ i {
       </div>
     </li>`).join('') + '</ul>';
 
-  updateMemberCompletionPercentage(memberName); // Update individual member's completion percentage
+  updateMemberCompletionPercentage(memberName); 
 }
 
 
 function markAsDone(memberName, taskIndex) {
   const tasksData = JSON.parse(localStorage.getItem('tasksData')) || {};
   if (memberName in tasksData) {
-    tasksData[memberName][taskIndex].completed = true; // Mark the task as done
+    tasksData[memberName][taskIndex].completed = true; 
     localStorage.setItem('tasksData', JSON.stringify(tasksData));
-    updateManagerView(memberName); // Refresh the task list for the member
+    updateManagerView(memberName); 
   }
 }
 
