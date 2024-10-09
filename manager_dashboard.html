@@ -6,210 +6,233 @@
   <title>Manager Dashboard</title>
   
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
   <style>
-  /* Added some new styles to make it more interactive and professional */
+    /* Added some new styles to make it more interactive and professional */
+    body {
+      background-color: #f8f9fa;
+      overflow-x: hidden;
+      font-family: 'Open Sans', sans-serif;
+    }
 
-body {
-  background-color: #f8f9fa;
-  overflow-x: hidden;
-  font-family: 'Open Sans', sans-serif; /* Added a modern font family */
-}
+    .card {
+      border-radius: 10px;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
 
-.card {
-  border-radius: 10px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 20px; /* Added some padding to the cards */
-}
+    .container {
+      margin-top: 20px;
+    }
 
-.container {
-  margin-top: 20px;
-}
+    .form-label {
+      margin-top: 10px;
+    }
 
-.form-label {
-  margin-top: 10px;
-}
+    .task-list {
+      margin-top: 20px;
+    }
 
-.task-list {
-  margin-top: 20px;
-}
+    .list-group-item {
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
 
-.list-group-item {
-  cursor: pointer;
-  transition: background-color 0.3s; /* Added a transition effect */
-}
+    .list-group-item:hover {
+      background-color: #f1f1f1;
+    }
 
-.list-group-item:hover {
-  background-color: #f1f1f1;
-}
+    .member-percentage {
+      float: right;
+      font-weight: bold;
+      color: #0f0f10;
+    }
 
-.member-percentage {
-  float: right;
-  font-weight: bold;
-  color: #0f0f10; /* Changed the color to a more professional blue */
-}
+    .sidebar {
+      height: 100%;
+      width: 250px;
+      position: fixed;
+      top: 0;
+      left: -250px;
+      background-color: #2c70b5da;
+      padding-top: 60px;
+      transition: 0.5s;
+      overflow-x: hidden;
+      z-index: 1000;
+      box-shadow: 0px 0px 10px rgba(206, 70, 70, 0.2);
+    }
 
-.sidebar {
-  height: 100%;
-  width: 250px;
-  position: fixed;
-  top: 0;
-  left: -250px;
-  background-color: #2c70b5da;
-  padding-top: 60px;
-  transition: 0.5s;
-  overflow-x: hidden;
-  z-index: 1000;
-  box-shadow: 0px 0px 10px rgba(206, 70, 70, 0.2); /* Added a box shadow to the sidebar */
-}
+    .sidebar a {
+      padding: 10px 15px;
+      text-decoration: none;
+      font-size: 18px;
+      color: #f1f1f1;
+      display: block;
+      transition: 0.3s;
+    }
 
-.sidebar a {
-  padding: 10px 15px;
-  text-decoration: none;
-  font-size: 18px;
-  color: #f1f1f1;
-  display: block;
-  transition: 0.3s;
-}
+    .sidebar a:hover {
+      background-color: #404242;
+      color: #fff;
+    }
 
-.sidebar a:hover {
-  background-color: #404242;
-  color: #fff; /* Changed the hover color to white */
-}
+    .openbtn {
+      font-size: 20px;
+      cursor: pointer;
+      background-color: #343a40;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 1001;
+    }
 
-.sidebar a i {
-  margin-right: 10px; /* Added margin to the icons */
-}
+    .main-content {
+      margin-left: 0;
+      transition: margin-left 0.5s;
+    }
 
-.openbtn {
-  font-size: 20px;
-  cursor: pointer;
-  background-color: #343a40;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  z-index: 1001;
-}
+    .main-content.active {
+      margin-left: 250px;
+    }
 
-.closebtn {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 30px;
-  cursor: pointer;
-  color: white;
-}
+    /* Added some new styles for the tables */
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
 
-.sidebar.active {
-  left: 0;
-}
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
 
-.main-content {
-  margin-left: 0;
-  transition: margin-left 0.5s;
-}
+    th {
+      background-color: #f0f0f0;
+    }
 
-.main-content.active {
-  margin-left: 250px;
-}
+    tr:hover {
+      background-color: #f1f1f1;
+    }
 
-
-#addMemberSection, #removeMemberSection {
-  display: none;
-}
-
-
-table {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-th, td {
-  border: 1px solid #ddd;
-  padding: 10px;
-  text-align: left;
-}
-
-th {
-  background-color: #f0f0f0;
-}
-
-tr:hover {
-  background-color: #f1f1f1;
-}
+    /* Styles for charts */
+    .chart-container {
+      position: relative;
+      margin: auto;
+      height: 40vh;
+      width: 80vw;
+    }
 
 
-.btn {
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 5px;
-}
 
-.btn-primary {
-  background-color: #337ab7;
-  color: #fff;
-}
+    /* calender css */
+    h1 {
+            text-align: center;
+            color: #4A90E2;
+        }
 
-.btn-danger {
-  background-color: #dc3545;
-  color: #fff;
-}
+        label {
+            font-size: 1.2em;
+            margin-right: 10px;
+        }
 
-.btn-success {
-  background-color: #28a745;
-  color: #fff;
-}
+        select, button {
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
 
-.btn-sm {
-  padding: 5px 10px;
-  font-size: 12px;
-}
+        select:focus, button:focus {
+            border-color: #4A90E2;
+            outline: none;
+        }
 
+        button {
+            background-color: #4A90E2;
+            color: white;
+            border: none;
+        }
 
-i {
-  font-size: 18px;
-  margin-right: 10px;
-}
+        button:hover {
+            background-color: #357ABD;
+        }
 
+        #calendarContainer {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
 
-.dashboard {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-}
+        #calendarTable {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
 
-.dashboard .card {
-  margin: 20px;
-  width: calc(33.33% - 20px);
-}
+        #calendarTable th {
+            background-color: #4A90E2;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
 
-.dashboard .card .card-body {
-  padding: 20px;
-}
+        #calendarGrid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr); 
+            gap: 10px; 
+            padding: 10px;
+        }
 
-.dashboard .card .card-title {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
+        .dateBox {
+            border: 1.3px solid #0c0b0b;
+            text-align: center;
+            padding: 1px;
+            background-color: #ffffff;
+            border-radius: 50px;
+            transition: background-color 0.3s ease;
+            width: 50px; 
+            height: 50px; 
+            display: flex; 
+            justify-content: center;
+            align-items: center;
+            cursor: pointer; 
+        }
 
-.dashboard .card .card-text {
-  font-size: 14px;
-  color: #666;
-}
+        .dateBox.present {
+            background-color: green; 
+            color: white; 
+        }
 
+        .dateBox.absent {
+            background-color: red; 
+            color: white;
+        }
 
+        @media (max-width: 600px) {
+            label, select, button {
+                font-size: 0.9em;
+                margin-bottom: 10px;
+                display: block;
+            }
+            button {
+                margin-top: 10px;
+            }
+            #calendarTable {
+                font-size: 0.8em; 
+            }
+        }
   </style>
 </head>
 <body>
 
-  <!-- Sidebar -->
   <div id="mySidebar" class="sidebar">
     <a href="javascript:void(0)" class="closebtn" onclick="toggleSidebar()">&times;</a>
     <a href="#">Dashboard</a>
@@ -220,10 +243,10 @@ i {
     <a href="index.html">Log Out</a>
   </div>
 
-  <!-- Button to open sidebar -->
+  
   <button class="openbtn" onclick="toggleSidebar()">☰</button>
 
-  <!-- Main content -->
+  
   <div id="main" class="main-content">
     <div class="container">
       <h2>Manager Dashboard</h2>
@@ -310,16 +333,77 @@ i {
           <button type="submit" class="btn btn-danger">Remove Member</button>
         </form>
       </div>
+
+      <!-- Charts Section -->
+      <div class="card p-4 mt-4">
+        <h4>Team Completion Percentage</h4>
+        <div class="chart-container">
+          <canvas id="completionChart"></canvas>
+        </div>
+      </div>
+
+      <div class="card p-4 mt-4">
+        <h4>Task Distribution</h4>
+        <div class="chart-container">
+          <canvas id="taskPieChart"></canvas>
+        </div>
+      </div>
     </div>
   </div>
 
+<br><br><br>
+
+  <h1>Assignment Attendance System</h1>
+    <div>
+        <label for="monthSelect">Select Month:</label>
+        <select id="monthSelect">
+            <option value="0">January</option>
+            <option value="1">February</option>
+            <option value="2">March</option>
+            <option value="3">April</option>
+            <option value="4">May</option>
+            <option value="5">June</option>
+            <option value="6">July</option>
+            <option value="7">August</option>
+            <option value="8">September</option>
+            <option value="9">October</option>
+            <option value="10">November</option>
+            <option value="11">December</option>
+        </select>
+        <button id="generateCalendar">Generate Calendar</button>
+    </div>
+
+    <div id="calendarContainer">
+        <table id="calendarTable">
+            <thead>
+                <tr>
+                    <th colspan="7">Calendar</th>
+                </tr>
+            </thead>
+            <tbody id="calendarBody">
+                <tr>
+                    <td colspan="7" id="calendarGrid">
+                        <!-- Dates will be populated here -->
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+  
+
   <script>
-    // Toggle sidebar visibility
+
+     // Toggle sidebar visibility
     function toggleSidebar() {
       const sidebar = document.getElementById("mySidebar");
       const mainContent = document.getElementById("main");
       sidebar.classList.toggle("active");
       mainContent.classList.toggle("active");
+      if (sidebar.classList.contains("active")) {
+        sidebar.style.left = "0";
+      } else {
+        sidebar.style.left = "-250px";
+      }
     }
 
     
@@ -328,13 +412,13 @@ i {
       document.getElementById("removeMemberSection").style.display = 'none';
     }
 
-   
+    
     function showRemoveMember() {
       document.getElementById("removeMemberSection").style.display = 'block';
       document.getElementById("addMemberSection").style.display = 'none';
     }
 
-    
+   
     document.getElementById('addMemberForm').addEventListener('submit', function(event) {
       event.preventDefault();
       const memberName = document.getElementById('memberName').value;
@@ -348,18 +432,17 @@ i {
       alert(`Member ${memberName} added to the team!`);
     });
 
-    
     document.getElementById('removeMemberForm').addEventListener('submit', function(event) {
       event.preventDefault();
       const removeMemberName = document.getElementById('removeMemberName').value;
       const teamId = document.getElementById('removeTeamSelect').value;
 
-      
+     
       const index = teamMembers[teamId].indexOf(removeMemberName);
       if (index !== -1) {
         teamMembers[teamId].splice(index, 1);
         saveTeamMembers(); 
-        document.getElementById('removeMemberName').value = '';
+        document.getElementById('removeMemberName').value = ''; 
         alert(`Member ${removeMemberName} removed from the team!`);
       } else {
         alert(`Member ${removeMemberName} not found in the selected team.`);
@@ -372,7 +455,7 @@ i {
       2: ['Bilakshan', 'Bhavesh', 'Bhumika', 'Chirayu']
     };
 
-  
+    
     function saveTeamMembers() {
       localStorage.setItem('teamMembers', JSON.stringify(teamMembers));
     }
@@ -382,11 +465,11 @@ i {
       const selectedMemberName = document.getElementById('selectedMemberName');
       const taskAssignmentSection = document.getElementById('taskAssignmentSection');
 
-  
+      
       const membersList = document.getElementById('membersList');
       membersList.innerHTML = `<h4>Team Members</h4><ul class="list-group">${teamMembers[teamId].map(member => `<li class="list-group-item" onclick="updateManagerView('${member}')">${member} <span id="percentage-${member}" class="member-percentage">0%</span></li>`).join('')}</ul>`;
 
-
+      
       taskAssignmentSection.style.display = 'block';
       updateCompletionPercentage(teamId);
     }
@@ -410,7 +493,7 @@ i {
           </div>
         </li>`).join('') + '</ul>';
 
-      updateMemberCompletionPercentage(memberName);
+      updateMemberCompletionPercentage(memberName); 
     }
 
     document.getElementById('taskAssignmentForm').addEventListener('submit', function(event) {
@@ -433,7 +516,6 @@ i {
       }
     });
 
-    
     function updateCompletionPercentage(teamId) {
       const completionPercentages = [];
       const tasksData = JSON.parse(localStorage.getItem('tasksData')) || {};
@@ -450,7 +532,7 @@ i {
         document.getElementById(`percentage-${member}`).textContent = `${memberCompletionPercentage}%`;
       });
 
-      
+     
       const totalTasks = completionPercentages.length;
       const totalCompleted = completionPercentages.reduce((acc, curr) => acc + curr, 0);
       const teamCompletionPercentage = totalTasks > 0 
@@ -460,11 +542,11 @@ i {
       document.getElementById(`completion-${teamId}`).textContent = `${teamCompletionPercentage}%`;
     }
 
-    
+   
     function removeTask(memberName, taskIndex) {
       const tasksData = JSON.parse(localStorage.getItem('tasksData')) || {};
       if (memberName in tasksData) {
-        
+       
         tasksData[memberName].splice(taskIndex, 1);
         localStorage.setItem('tasksData', JSON.stringify(tasksData));
         updateManagerView(memberName); 
@@ -484,7 +566,7 @@ i {
       document.getElementById('memberName').value = ''; 
       document.getElementById('memberUserId').value = ''; 
 
-      // Update the member count
+      
       const teamMembersCount = document.getElementById(`team${teamId}Members`);
       teamMembersCount.textContent = teamMembers[teamId].length;
 
@@ -497,7 +579,7 @@ i {
       const memberName = document.getElementById('removeMemberName').value;
       const teamId = document.getElementById('removeTeamSelect').value;
 
-      
+     
       const memberIndex = teamMembers[teamId].indexOf(memberName);
       if (memberIndex > -1) {
         teamMembers[teamId].splice(memberIndex, 1);
@@ -556,7 +638,145 @@ function markAsDone(memberName, taskIndex) {
   }
 }
 
+function initCharts() {
+  const completionCtx = document.getElementById('completionChart').getContext('2d');
+  const taskCtx = document.getElementById('taskPieChart').getContext('2d');
+
+  
+  const completionData = {
+    labels: ['Team Alpha', 'Team Beta'],
+    datasets: [{
+      label: 'Team Completion %',
+      data: [50, 75],
+      backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(255, 206, 86, 0.2)'],
+      borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 206, 86, 1)'],
+      borderWidth: 1
+    }]
+  };
+
+  const taskData = {
+    labels: ['Task 1', 'Task 2', 'Task 3'],
+    datasets: [{
+      label: 'Tasks Distribution',
+      data: [10, 20, 30], 
+      backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'],
+      borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
+      borderWidth: 1
+    }]
+  };
+
+    const ctx = document.getElementById('completionChart').getContext('2d');
+    const completionChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Team Alpha', 'Team Beta'],
+        datasets: [{
+          label: 'Completion %',
+          data: [70, 85], // Example data
+          backgroundColor: [
+            'rgba(54, 162, 235, 0.5)',
+            'rgba(255, 99, 132, 0.5)'
+          ],
+          borderColor: [
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 99, 132, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Completion Percentage'
+            }
+          }
+        }
+      }
+    });
+
+    
+    const pieCtx = document.getElementById('taskPieChart').getContext('2d');
+    const taskPieChart = new Chart(pieCtx, {
+      type: 'pie',
+      data: {
+        labels: ['Completed', 'Pending', 'In Progress'],
+        datasets: [{
+          label: 'Task Distribution',
+          data: [15, 5, 10], 
+          backgroundColor: [
+            'rgba(75, 192, 192, 0.5)',
+            'rgba(255, 206, 86, 0.5)',
+            'rgba(153, 102, 255, 0.5)'
+          ],
+          borderColor: [
+            'rgba(75, 192, 192, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(153, 102, 255, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true,
+            text: 'Task Distribution'
+          }
+        }
+      }
+    });
+}
+
+    document.addEventListener('DOMContentLoaded', function() {
+        initCharts();
+    });
+
+    document.getElementById('generateCalendar').addEventListener('click', function() {
+            const monthSelect = document.getElementById('monthSelect');
+            const selectedMonth = parseInt(monthSelect.value);
+            const year = new Date().getFullYear(); 
+            const daysInMonth = new Date(year, selectedMonth + 1, 0).getDate(); 
+
+            const calendarGrid = document.getElementById('calendarGrid');
+            calendarGrid.innerHTML = ''; 
+
+           
+            for (let day = 1; day <= daysInMonth; day++) {
+                const box = `<div class="dateBox" data-state="normal">${day}</div>`;
+                calendarGrid.insertAdjacentHTML('beforeend', box);
+            }
+
+            // Add click event to each date box
+            const dateBoxes = document.querySelectorAll('.dateBox');
+            dateBoxes.forEach(box => {
+                box.addEventListener('click', function() {
+                    const currentState = this.getAttribute('data-state');
+
+                    if (currentState === 'normal') {
+                        this.classList.add('present');
+                        this.setAttribute('data-state', 'present');
+                    } else if (currentState === 'present') {
+                        this.classList.remove('present');
+                        this.classList.add('absent');
+                        this.setAttribute('data-state', 'absent');
+                    } else if (currentState === 'absent') {
+                        this.classList.remove('absent');
+                        this.setAttribute('data-state', 'normal');
+                        this.style.backgroundColor = '#ffffff'; 
+                    }
+                });
+            });
+        });
   </script>
 
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
